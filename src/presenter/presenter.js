@@ -14,7 +14,7 @@ export default class Presenter {
   }
 
   init() {
-    render(this.FormEditView, this.container);
+    render(this.formEdit, this.container);
     render(this.routeListPoints, this.container);
 
     for (let i = 0; i < POINTS; i++) {
