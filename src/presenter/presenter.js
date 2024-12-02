@@ -1,3 +1,4 @@
+import SortView from '../view/sort-view.js';
 import FormEditView from '../view/form-edit-view.js';
 import EditList from '../view/event-list-view.js';
 import PointView from '../view/point-view.js';
@@ -7,14 +8,18 @@ const POINTS = 3;
 
 export default class Presenter {
   routeListPoints = new EditList();
+  sortView = new SortView();
   formEdit = new FormEditView();
 
-  constructor ({container}) {
+  constructor({container}) {
     this.container = container;
   }
 
   init() {
+    render(this.sortView, this.container);
+
     render(this.formEdit, this.container);
+
     render(this.routeListPoints, this.container);
 
     for (let i = 0; i < POINTS; i++) {
