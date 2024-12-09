@@ -143,6 +143,7 @@ function createFormEditTemplate() {
 }
 
 export default class FormEditView {
+
   getTemplate() {
     return createFormEditTemplate();
   }
