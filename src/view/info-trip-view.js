@@ -1,20 +1,29 @@
 import { createElement } from '../render.js';
 
-function createTripInfoTemplate() {
+function createTripInfoTemplate({title,dates,cost}) {
   return (`<section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">
-              <h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
-              <p class="trip-info__dates">18&nbsp;&mdash;&nbsp;20 Mar</p>
+              <h1 class="trip-info__title">${title}</h1>
+              <p class="trip-info__dates">18&nbsp;&mdash;&nbsp;${dates}</p>
             </div>
             <p class="trip-info__cost">
-              Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
+              Total: &euro;&nbsp;<span class="trip-info__cost-value">${cost}</span>
             </p>
           </section>`);
 }
 
-export default class NewTripInfoView {
+export default class InfoTripView {
+  constructor({title,dates,cost}){
+    this.title = title;
+    this.dates = dates;
+    this.cost = cost;
+  }
+
   getTemplate() {
-    return createTripInfoTemplate();
+    return createTripInfoTemplate(
+      {title:this.title,
+        dates:this.dates,
+        cost:this.cost});
   }
 
   getElement() {
