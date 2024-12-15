@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const TYPE_NAMES = {
   taxi: 'Taxi',
@@ -65,26 +65,16 @@ function createPointTemplate(point, destination, offers) {
   `);
 }
 
-export default class PointView {
+export default class PointView extends AbstractView{
   constructor(point, destination, offers) {
+    super();
     this.point = point;
     this.destination = destination || { name: 'Unknown destination' };
     this.offers = offers || [];
   }
 
-  getTemplate() {
+  get template() {
     return createPointTemplate(this.point, this.destination, this.offers);
   }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
 }
+

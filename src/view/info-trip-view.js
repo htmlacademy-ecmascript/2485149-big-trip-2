@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createTripInfoTemplate({title,dates,cost}) {
   return (`<section class="trip-main__trip-info  trip-info">
@@ -12,30 +12,19 @@ function createTripInfoTemplate({title,dates,cost}) {
           </section>`);
 }
 
-export default class InfoTripView {
+export default class InfoTripView extends AbstractView {
   constructor({title,dates,cost}){
+    super();
     this.title = title;
     this.dates = dates;
     this.cost = cost;
   }
 
-  getTemplate() {
+  get template() {
     return createTripInfoTemplate(
       {title:this.title,
         dates:this.dates,
         cost:this.cost});
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
 
