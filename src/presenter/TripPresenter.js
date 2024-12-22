@@ -9,33 +9,40 @@ import { mockData } from '../mock/mockData';
 import { mockDestination } from '../mock/destinations';
 import { mockOffers } from '../mock/offers';
 import PointsModal from '../modals/trip-points';
-
+import { replace } from '../framework/render';
 export default class TripPresenter {
+  #container; #data; #pointsModal; #routeListPoints; #sortView; #formEdit;
   constructor(container) {
-    this.container = container;
-    this.data = mockData;
-    this.pointsModal = new PointsModal(mockData);
-    this.routeListPoints = new EditList();
-    this.sortView = new SortView();
-    this.formEdit = new FormEditView();
+    this.#container = container;
+    this.#data = mockData;
+    this.#pointsModal = new PointsModal(mockData);
+    this.#routeListPoints = new EditList();
+    this.#sortView = new SortView();
+    this.#formEdit = new FormEditView();
+  }
+
+  setEditButtonHandler(pointView) {
+    pointView.setRollupButtonClickHandler(() => {
+      const formEditView = new FormEditView(pointView.data);
+      replace(formEditView, pointView);
+    });
   }
 
   init() {
     const tripInfo = {
-      title: this.getTripTitle(this.data),
-      dates: this.getTripDates(this.data),
-      cost: this.getTotalCost(this.data),
+      title: this.getTripTitle(this.#data),
+      dates: this.getTripDates(this.#data),
+      cost: this.getTotalCost(this.#data),
     };
     const infoTripView = new InfoTripView(tripInfo);
-    render(infoTripView, this.container);
+    render(infoTripView, this.#container);
 
     const filterView = new FilterView();
-    render(filterView, this.container);
+    render(filterView, this.#container);
 
-    render(this.sortView, this.container);
-    render(this.formEdit, this.container);
-    render(this.routeListPoints, this.container);
-    const points = this.pointsModal.getPoints();
+    render(this.#sortView, this.#container);
+    render(this.#routeListPoints, this.#container);
+    const points = this.#pointsModal.getPoints();
     points.forEach((point) => {
       const destination = mockDestination.find((dest) => dest.id === point.destination);
       const offers = point.offers.map((offerId) =>
@@ -43,7 +50,8 @@ export default class TripPresenter {
       );
 
       const pointView = new PointView(point, destination, offers);
-      render(pointView, this.routeListPoints.getElement());
+      this.setEditButtonHandler(pointView);
+      render(pointView, this.#routeListPoints.element);
     });
   }
 
