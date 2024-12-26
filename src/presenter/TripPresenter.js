@@ -24,9 +24,18 @@ export default class TripPresenter {
   setEditButtonHandler(pointView) {
     pointView.setRollupButtonClickHandler(() => {
       const formEditView = new FormEditView(pointView.data);
+      const escKeyHandler = (evt) => {
+        if (evt.key === 'Escape') {
+          evt.preventDefault();
+          replace(pointView, formEditView);
+          document.removeEventListener('keydown', escKeyHandler);
+        }
+      };
       replace(formEditView, pointView);
+      document.addEventListener('keydown', escKeyHandler);
     });
   }
+
 
   init() {
     const tripInfo = {

@@ -143,11 +143,56 @@ function createFormEditTemplate() {
 }
 
 export default class FormEditView extends AbstractView {
-  constructor(){
+  constructor() {
     super();
+    this._callback = {};
   }
 
   get template() {
     return createFormEditTemplate();
   }
+
+  setRollupButtonClickHandler(callback) {
+    this._callback.rollupClick = callback;
+    const rollupButton = this.element.querySelector('.event__rollup-btn');
+    if (rollupButton) {
+      rollupButton.addEventListener('click', this._callback.rollupClick);
+    }
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.submit = callback;
+    const form = this.element.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', this._callback.submit);
+    }
+  }
+
+  setEscKeyHandler(callback) {
+    this._callback.escKey = callback;
+    document.addEventListener('keydown', (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        this._callback.escKey();
+      }
+    });
+  }
+
+  removeHandlers() {
+    document.removeEventListener('keydown', this._callback.escKey);
+    const rollupButton = this.element.querySelector('.event__rollup-btn');
+    if (rollupButton) {
+      rollupButton.removeEventListener('click', this._callback.rollupClick);
+    }
+    const form = this.element.querySelector('form');
+    if (form) {
+      form.removeEventListener('submit', this._callback.submit);
+    }
+  }
+
+  removeElement() {
+    this.removeHandlers();
+    super.removeElement();
+  }
 }
+
