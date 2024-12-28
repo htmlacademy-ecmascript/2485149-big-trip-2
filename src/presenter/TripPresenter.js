@@ -10,32 +10,53 @@ import { mockDestination } from '../mock/destinations';
 import { mockOffers } from '../mock/offers';
 import PointsModal from '../modals/trip-points';
 import { replace } from '../framework/render';
+
 export default class TripPresenter {
-  #container; #data; #pointsModal; #routeListPoints; #sortView; #formEdit;
+  #container;
+  #data;
+  #pointsModal;
+  #routeListPoints;
+  #sortView;
+  #activeFormEdit = null;
+
   constructor(container) {
     this.#container = container;
     this.#data = mockData;
     this.#pointsModal = new PointsModal(mockData);
     this.#routeListPoints = new EditList();
     this.#sortView = new SortView();
-    this.#formEdit = new FormEditView();
   }
 
   setEditButtonHandler(pointView) {
     pointView.setRollupButtonClickHandler(() => {
-      const formEditView = new FormEditView(pointView.data);
+      if (this.#activeFormEdit) {
+        replace(this.#activeFormEdit.relatedPointView, this.#activeFormEdit);
+        this.#activeFormEdit = null;
+      }
+
+      const formEditView = new FormEditView(pointView);
+      console.log(pointView);
       const escKeyHandler = (evt) => {
         if (evt.key === 'Escape') {
           evt.preventDefault();
           replace(pointView, formEditView);
+          this.#activeFormEdit = null;
           document.removeEventListener('keydown', escKeyHandler);
         }
       };
+
+      formEditView.setFormSubmitHandler((updatedData) => {
+        pointView.data = { ...pointView.data, ...updatedData };
+        replace(pointView, formEditView);
+        this.#activeFormEdit = null;
+      });
+
       replace(formEditView, pointView);
+      this.#activeFormEdit = formEditView;
+      this.#activeFormEdit.relatedPointView = pointView;
       document.addEventListener('keydown', escKeyHandler);
     });
   }
-
 
   init() {
     const tripInfo = {
@@ -51,6 +72,7 @@ export default class TripPresenter {
 
     render(this.#sortView, this.#container);
     render(this.#routeListPoints, this.#container);
+
     const points = this.#pointsModal.getPoints();
     points.forEach((point) => {
       const destination = mockDestination.find((dest) => dest.id === point.destination);
@@ -59,6 +81,7 @@ export default class TripPresenter {
       );
 
       const pointView = new PointView(point, destination, offers);
+
       this.setEditButtonHandler(pointView);
       render(pointView, this.#routeListPoints.element);
     });
@@ -76,8 +99,16 @@ export default class TripPresenter {
     if (!data.length) {
       return '';
     }
-    const startDate = new Date(data[0].dateFrom).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const endDate = new Date(data[data.length - 1].dateTo).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const startDate = new Date(data[0].dateFrom).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+    const endDate = new Date(data[data.length - 1].dateTo).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
     return `${startDate} - ${endDate}`;
   }
 
