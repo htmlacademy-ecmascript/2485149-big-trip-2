@@ -21,8 +21,7 @@ module.exports = {
           globOptions: {
             ignore: ['**/index.html'],
           },
-        },
-      ],
+        }],
     }),
   ],
   module: {
@@ -37,6 +36,10 @@ module.exports = {
           },
         },
       },
-    ]
-  }
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
+      },
+    ],
+  },
 };
