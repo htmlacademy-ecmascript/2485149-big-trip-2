@@ -1,4 +1,4 @@
-import AbstractView from "../framework/view/abstract-view.js";
+import AbstractView from '../framework/view/abstract-view.js';
 
 function createEmptyTemplate() {
   return `<main class="page-body__page-main  page-main">

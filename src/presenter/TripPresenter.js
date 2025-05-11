@@ -1,16 +1,15 @@
-import InfoTripView from "../view/info-trip-view";
-import FilterView from "../view/filter-view";
-import SortView from "../view/sort-view";
-import EditList from "../view/event-list-view";
-import FormEditView from "../view/form-edit-view";
-import PointView from "../view/point-view";
-import { render } from "../render";
-import { mockData } from "../mock/mockData";
-import { mockDestination } from "../mock/destinations";
-import { mockOffers } from "../mock/offers";
-import PointsModal from "../modals/trip-points";
-import { replace } from "../framework/render";
-import NoPoint from "../view/no-point-view";
+import InfoTripView from '../view/info-trip-view';
+import FilterView from '../view/filter-view';
+import SortView from '../view/sort-view';
+import EditList from '../view/event-list-view';
+import FormEditView from '../view/form-edit-view';
+import PointView from '../view/point-view';
+import { render } from '../framework/render';
+import { mockData } from '../mock/mockData';
+import { mockDestination } from '../mock/destinations';
+import { mockOffers } from '../mock/offers';
+import PointsModal from '../modals/trip-points';
+import { replace } from '../framework/render';
 
 export default class TripPresenter {
   #container;
@@ -37,11 +36,11 @@ export default class TripPresenter {
 
       const formEditView = new FormEditView(pointView);
       const escKeyHandler = (evt) => {
-        if (evt.key === "Escape") {
+        if (evt.key === 'Escape') {
           evt.preventDefault();
           replace(pointView, formEditView);
           this.#activeFormEdit = null;
-          document.removeEventListener("keydown", escKeyHandler);
+          document.removeEventListener('keydown', escKeyHandler);
         }
       };
 
@@ -54,13 +53,13 @@ export default class TripPresenter {
       formEditView.setRollupButtonClickHandler(() => {
         replace(pointView, formEditView);
         this.#activeFormEdit = null;
-        document.removeEventListener("keydown", escKeyHandler);
+        document.removeEventListener('keydown', escKeyHandler);
       });
 
       replace(formEditView, pointView);
       this.#activeFormEdit = formEditView;
       this.#activeFormEdit.relatedPointView = pointView;
-      document.addEventListener("keydown", escKeyHandler);
+      document.addEventListener('keydown', escKeyHandler);
     });
   }
 
@@ -81,25 +80,19 @@ export default class TripPresenter {
     render(this.#routeListPoints, this.#container);
 
     const points = this.#pointsModal.getPoints();
+    points.forEach((point) => {
+      const destination = mockDestination.find(
+        (dest) => dest.id === point.destination
+      );
+      const offers = point.offers.map((offerId) =>
+        mockOffers.find((offer) => offer.id === offerId)
+      );
 
-    if (true) {
-      const noPointVal = new NoPoint();
-      render(noPointVal, this.#routeListPoints.element);
-    } else {
-      points.forEach((point) => {
-        const destination = mockDestination.find(
-          (dest) => dest.id === point.destination
-        );
-        const offers = point.offers.map((offerId) =>
-          mockOffers.find((offer) => offer.id === offerId)
-        );
+      const pointView = new PointView(point, destination, offers);
 
-        const pointView = new PointView(point, destination, offers);
-
-        this.setEditButtonHandler(pointView);
-        render(pointView, this.#routeListPoints.element);
-      });
-    }
+      this.setEditButtonHandler(pointView);
+      render(pointView, this.#routeListPoints.element);
+    });
   }
 
   getTripTitle(data) {
@@ -107,26 +100,26 @@ export default class TripPresenter {
       const destination = mockDestination.find(
         (dest) => dest.id === point.destination
       );
-      return destination ? destination.name : "Unknown";
+      return destination ? destination.name : 'Unknown';
     });
-    return destinationNames.join(" - ");
+    return destinationNames.join(' - ');
   }
 
   getTripDates(data) {
     if (!data.length) {
-      return "";
+      return '';
     }
-    const startDate = new Date(data[0].dateFrom).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
+    const startDate = new Date(data[0].dateFrom).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
     });
     const endDate = new Date(data[data.length - 1].dateTo).toLocaleDateString(
-      "en-GB",
+      'en-GB',
       {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
       }
     );
     return `${startDate} - ${endDate}`;
