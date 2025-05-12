@@ -4,7 +4,7 @@ import SortView from '../view/sort-view';
 import EditList from '../view/event-list-view';
 import FormEditView from '../view/form-edit-view';
 import PointView from '../view/point-view';
-import { render } from '../render';
+import { render } from '../framework/render';
 import { mockData } from '../mock/mockData';
 import { mockDestination } from '../mock/destinations';
 import { mockOffers } from '../mock/offers';
@@ -35,7 +35,6 @@ export default class TripPresenter {
       }
 
       const formEditView = new FormEditView(pointView);
-      console.log(pointView);
       const escKeyHandler = (evt) => {
         if (evt.key === 'Escape') {
           evt.preventDefault();
@@ -51,6 +50,12 @@ export default class TripPresenter {
         this.#activeFormEdit = null;
       });
 
+      formEditView.setRollupButtonClickHandler(() => {
+        replace(pointView, formEditView);
+        this.#activeFormEdit = null;
+        document.removeEventListener('keydown', escKeyHandler);
+      });
+
       replace(formEditView, pointView);
       this.#activeFormEdit = formEditView;
       this.#activeFormEdit.relatedPointView = pointView;
@@ -64,6 +69,7 @@ export default class TripPresenter {
       dates: this.getTripDates(this.#data),
       cost: this.getTotalCost(this.#data),
     };
+
     const infoTripView = new InfoTripView(tripInfo);
     render(infoTripView, this.#container);
 
@@ -75,7 +81,9 @@ export default class TripPresenter {
 
     const points = this.#pointsModal.getPoints();
     points.forEach((point) => {
-      const destination = mockDestination.find((dest) => dest.id === point.destination);
+      const destination = mockDestination.find(
+        (dest) => dest.id === point.destination
+      );
       const offers = point.offers.map((offerId) =>
         mockOffers.find((offer) => offer.id === offerId)
       );
@@ -89,7 +97,9 @@ export default class TripPresenter {
 
   getTripTitle(data) {
     const destinationNames = data.map((point) => {
-      const destination = mockDestination.find((dest) => dest.id === point.destination);
+      const destination = mockDestination.find(
+        (dest) => dest.id === point.destination
+      );
       return destination ? destination.name : 'Unknown';
     });
     return destinationNames.join(' - ');
@@ -104,11 +114,14 @@ export default class TripPresenter {
       month: 'short',
       year: 'numeric',
     });
-    const endDate = new Date(data[data.length - 1].dateTo).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    });
+    const endDate = new Date(data[data.length - 1].dateTo).toLocaleDateString(
+      'en-GB',
+      {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }
+    );
     return `${startDate} - ${endDate}`;
   }
 

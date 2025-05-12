@@ -1,7 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createFormEditTemplate(point) {
-  console.log(point.point);
   return `<form class="event event--edit" action="#" method="post">
                 <header class="event__header">
                   <div class="event__type-wrapper">
@@ -87,6 +86,9 @@ function createFormEditTemplate(point) {
                   </div>
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                   <button class="event__reset-btn" type="reset">Cancel</button>
+                  <button class="event__rollup-btn" type="button">
+        <span class="visually-hidden">Close</span>
+      </button>
                 </header>
                 <section class="event__details">
                   <section class="event__section  event__section--offers">
@@ -215,4 +217,3 @@ export default class FormEditView extends AbstractView {
     super.removeElement();
   }
 }
-
