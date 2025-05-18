@@ -1,7 +1,8 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 function createFormEditTemplate() {
-  return `<form class="event event--edit" action="#" method="post">
+  return `  <li class="trip-events__item">
+  <form class="event event--edit" action="#" method="post">
   <section class="event__details">
                   <section class="event__section  event__section--offers">
                     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -62,7 +63,8 @@ function createFormEditTemplate() {
                     </div>
                   </section>
                 </section>
-              </form>`;
+              </form>
+              </li>`;
 }
 
 export default class FormEditView extends AbstractView {
