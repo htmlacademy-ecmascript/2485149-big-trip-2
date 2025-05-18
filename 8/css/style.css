@@ -327,6 +327,7 @@ main {
 
 .trip-events__list {
   padding: 0;
+  overflow: visible;
   margin: 0;
   list-style: none; }
 
