@@ -6,3 +6,9 @@ export const MessageText = {
   LIST_EMPTY__FUTURE: 'There are no future events now',
   FAIL: 'Failed to load latest route information',
 };
+ const Mode = {
+  DEFAULT:'DEFAULT',
+  EDITING: 'EDITING'
+};
+
+export default Mode

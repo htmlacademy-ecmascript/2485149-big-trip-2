@@ -83,7 +83,7 @@ function createPointTemplate(point, destination, offers) {
 }
 
 export default class PointView extends AbstractView {
-  constructor(point, destination, offers) {
+  constructor(point, destination, offers, onOpenEditButtonClick, onFavoriteClick) {
     super();
     this.point = point;
     this.destination = destination || { name: 'Unknown destination' };
