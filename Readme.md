@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
-* Студент: [Кристина Трофимова](https://up.htmlacademy.ru/ecmascript-individual/2/user/2485149).
-* Наставник: `Роман Марченко`.
+- Студент: [Кристина Трофимова](https://up.htmlacademy.ru/ecmascript-individual/2/user/2485149).
+- Наставник: `Евгений Лепёшкин`.
 
 ---
 
