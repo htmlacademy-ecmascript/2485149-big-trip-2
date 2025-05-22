@@ -88,12 +88,6 @@ export default class PointView extends AbstractView {
     this.point = point;
     this.destination = destination || { name: 'Unknown destination' };
     this.offers = offers || [];
-    this.onOpenEditButtonClick = onOpenEditButtonClick;
-    // this.setEventListeners();
-    this.handleFavoriteClick = onFavoriteClick;
-
-    this.element.querySelector('.event__favorite-btn')
-      .addEventListener('click', this.favoriteClickHandler);
   }
 
   get template() {

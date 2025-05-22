@@ -1,4 +1,4 @@
-import TripPresenter from './presenter/TripPresenter';
+import TripPresenter from './presenter/trip-presenter';
 
 const siteSortingContainer = document.querySelector('.trip-events');
 
